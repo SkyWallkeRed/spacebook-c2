@@ -31,35 +31,50 @@ function addPost(texts, ids) {
 }
 
 display.on('click', '.goComment', function() {
-        console.log(this);
+        //gets the index of the parent <p> [this = is the btn]
+        let id = $(this).closest("form").find('.post').attr("data-id");
+        var index = posts.map(function(el) {
+            return el.ids;
+        }).indexOf(id)
+        console.log('index: ' + index + '    id: ' + id)
+
+        console.log(this + 'this from .gocomment');
         // commnent comment NAME
-        var commentName = $('.commentName').val();
+        var commentName = $(this).closest("form").find('.commentName').val(); // NOT SPAVCIFIC
+        console.log(commentName + 'commentName');
         // comment comment COMMENT
-        var commentComment = $('.commentComment').val();
+        var commentComment = $(this).closest("form").find('.commentComment').val(); // NOT SPAVCIFIC
+        console.log(commentComment + 'commentComment');
         //creat key value pair obj
         let obj = { comentUser: commentName, comment: commentComment }
-            //gets the index of the parent <p> [this = is the btn]
-        let index = $(this).closest("form").find('.post').attr("data-id");
-        console.log(index)
-            // the index comes back as a 'string' here we make it a number
-        index = Number(index);
+        console.log(obj)
+
+
+
+
+
+        // let id = posts[index].ids;
+        // the index comes back as a 'string' here we make it a number
+        // index = Number(index);
         //push OBJ in to Arr in postas 'comments'
         posts[index].comments.push(obj);
         //      ()
-        renderComments(index, this)
+
+        renderComments(index, id)
+
     })
     //####################################################################
     // trying to render the comments in every obj ###### NOT-WORKING #####
     //####################################################################
-function renderComments(index) {
-
-
+function renderComments(index, id) {
     for (let z = 0; z < posts[index].comments.length; z++) {
 
         // console.log('append after this console')
         // NEEDS TO BE MORE SPECIFIC
-        $('.postComment').append('<li>' + posts[index].comments[z].comentUser +
+        //           [index]
+        $(`[data-id='` + id + `']`).append('<li>' + posts[index].comments[z].comentUser +
             ' ' + posts[index].comments[z].comment + '</li>');
+
     }
 
 }
@@ -73,13 +88,14 @@ function renderPosts() {
     // loops posts Arr and append the OBJs
     for (let i = 0; i < posts.length; i++) {
         display.append(`<form action="">
-      <p class='post' data-id=` + i + `> ` + posts[i].texts + ` <button type='button' class='remove'  data-id=` + i + `>REMOVE</button>` + `</p>
+      <p class='post' data-id=` + posts[i].ids + `> ` + posts[i].texts + ` <button type='button' class='remove'  data-id=` + i + `>REMOVE</button>` + `</p>
      <input type="text" name="" class="commentName" placeholder="name">
      <input type="text" name="" class="commentComment" placeholder="comment">
      <ul class = "postComment">
      </ul>
      <button class = "goComment"type="button">go</button>
      </form>`)
+
         renderComments(i);
     }
 
@@ -92,7 +108,7 @@ display.on("click", ".remove", function() {
     // cuts the posts Arr  of OBJ data-id to the next one 
     posts.splice(position, 1);
 
-    // renderPosts();  %%%%%%%%%%%%%%%%%%%%%  i have comment this invoke to check , check it later %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    renderPosts();
 })
 
 
