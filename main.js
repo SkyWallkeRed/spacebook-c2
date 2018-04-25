@@ -105,10 +105,10 @@ var SpacebookApp = function() {
         var $clickedPost = $(currentPostBtn).closest('.post');
         var id = $clickedPost.data().id;
         // let index = getIndexByID(id)
-        posts[id].comments.push({ text })
+        posts[id].comments.push({ text: text })
     }
 
-    var renderComments = function(postID) { // post = {text, id , comments[]} , posts = []
+    var renderComments = function(postID) {
         let post = _findPostById(postID);
         let $currentPost = $(".post[data-id=" + post.id + "]");
         $currentPost.find('.commentList').empty();
@@ -127,6 +127,13 @@ var SpacebookApp = function() {
 
     }
 
+    function reRenderComment(btn) {
+        var text = $(btn).prev().val();
+        app.createComment(text, btn);
+        let postID = $(btn).closest('.post').data().id;
+        app.renderComments(postID);
+    }
+
     return {
         posts,
         creatGuid: creatGuid,
@@ -136,7 +143,8 @@ var SpacebookApp = function() {
         createComment: createComment,
         renderComments: renderComments,
         // removeComment: removeComment,
-        toggleComments: toggleComments
+        toggleComments: toggleComments,
+        reRenderComment: reRenderComment
     }
 }
 
@@ -161,22 +169,7 @@ $('.posts').on('click', '.show-comments', function() {
     app.toggleComments(this);
 
 });
+
 $('.posts').on('click', '.add-comment', function() {
-    var text = $(this).prev().val();
-    app.createComment(text, this);
-
-
-    let postID = $(this).closest('.post').data().id;
-
-    app.renderComments(postID);
+    app.reRenderComment(this);
 })
-
-//##########################################
-
-
-
-
-// var getCurrentComment = function(currentPostBtn) {
-//     var $currentComment = $(currentPostBtn).closest('.add-comment').val();
-//     console.log($currentComment);
-// }
