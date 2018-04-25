@@ -1,8 +1,35 @@
 var SpacebookApp = function() {
-    var posts = [];
+    var posts = [{
+            text: "Hello world",
+            id: 0,
+            comments: [
+                { text: "Man, this is a comment!" },
+                { text: "Man, this is a comment!" },
+                { text: "Man, this is a comment!" }
+            ]
+        },
+        {
+            text: "Hello world",
+            id: 1,
+            comments: [
+                { text: "Man, this is a comment!" },
+                { text: "Man, this is a comment!" },
+                { text: "Man, this is a comment!" }
+            ]
+        },
+        {
+            text: "Hello world",
+            id: 2,
+            comments: [
+                { text: "Man, this is a comment!" },
+                { text: "Man, this is a comment!" },
+                { text: "Man, this is a comment!" }
+            ]
+        }
+    ];
 
     // the current id to assign to a post
-    var currentId = 0;
+    var currentId = 3;
     var $posts = $('.posts'); // DISPLAY 
 
     var creatGuid = function guid() {
@@ -78,7 +105,7 @@ var SpacebookApp = function() {
         var $clickedPost = $(currentPostBtn).closest('.post');
         var id = $clickedPost.data().id;
         // let index = getIndexByID(id)
-        posts[id].comments.push(text)
+        posts[id].comments.push({ text })
     }
 
     var renderComments = function(postID) { // post = {text, id , comments[]} , posts = []
@@ -87,7 +114,7 @@ var SpacebookApp = function() {
         $currentPost.find('.commentList').empty();
         for (let z = 0; z < post.comments.length; z++) {
             let $commentsList = $currentPost.find('.commentList');
-            $commentsList.append('<li>' + post.comments[z] + ':   <a href="#" class="removeComment">remove-comment</a>' + '</li>')
+            $commentsList.append('<li>' + post.comments[z].text + ':   <a href="#" class="removeComment">remove-comment</a>' + '</li>')
         }
     }
 
