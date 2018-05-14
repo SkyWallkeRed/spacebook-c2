@@ -24,7 +24,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.get('/posts', (req, res) => {
     Post.find().exec((err, posts) => {
         if (err) {
-            console.log(err)
+            console.error(err)
+            res.sendStatus(500).send("sorry");
         } else {
             // console.log(posts)
             res.send(posts);
@@ -63,7 +64,7 @@ app.put(`/posts/:id`, (req, res) => {
     var newcomment = (req.body);
     Post.findOneAndUpdate({ _id: id }, { $push: { comments: newcomment } }, { new: true }, (err, doc) => {
         if (err) {
-            console.log("Something wrong when updating data!");
+            console.error(err);
         }
         console.log(doc);
     });
@@ -86,7 +87,7 @@ app.delete(`/posts/:postid/:commentid`, (req, res) => {
         }
     }, (err, doc) => {
         if (err) {
-            console.log(err)
+            console.error(err)
         } else {
             console.log('comment :' + commentID + ' REMOVED')
         }

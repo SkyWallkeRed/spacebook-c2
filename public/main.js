@@ -9,8 +9,8 @@ let postsRenderer = new PostsRenderer();
 let eventsHandler = new EventsHandler(postsRepository, postsRenderer);
 //-----------------------------------------------------------------------------------
 async function loadPage() {
-    let data = await postsRepository.initData();
-    postsRenderer.renderPosts(data);
+    await postsRepository.initData();
+    postsRenderer.renderPosts(postsRepository.posts);
     // console.log(postsRepository.posts);
 }
 //-----------------------------------------------------------------------------------

@@ -5,23 +5,14 @@ class EventsHandler {
         this.$posts = $(".posts");
     }
 
-    async p() {
-        console.log('calling')
-        let data = await this.postsRepository.initData();
-        this.postsRenderer.renderPosts(data);
-        return data
-            // console.log(.posts);
-    }
-
-
-    registerAddPost() {
+    async registerAddPost() {
         $('#addpost').on('click', () => {
             let $input = $("#postText");
             if ($input.val() === "") {
                 alert("Please enter text!");
             } else {
-                this.postsRepository.addPost($input.val());
-                this.postsRenderer.renderPosts(this.p());
+                await this.postsRepository.addPost($input.val());
+                this.postsRenderer.renderPosts(this.postsRepository.posts);
                 $input.val("");
             }
         });
@@ -30,8 +21,8 @@ class EventsHandler {
     registerRemovePost() {
         this.$posts.on('click', '.remove-post', (event) => {
             let id = $(event.currentTarget).closest('.post').attr("data-id");
-            this.postsRepository.removePost(id);
-            this.postsRenderer.renderPosts(this.p());
+            await this.postsRepository.removePost(id);
+            this.postsRenderer.renderPosts(this.postsRepository.posts);
         });
     }
 
@@ -55,8 +46,8 @@ class EventsHandler {
             let postIndex = $(event.currentTarget).closest('.post').index();
             let newComment = { text: $comment.val(), user: $user.val() };
 
-            this.postsRepository.addComment(newComment, postID);
-            this.postsRenderer.renderComments(this.p(), postIndex);
+            await this.postsRepository.addComment(newComment, postID);
+            this.postsRenderer.renderComments(this.postsRepository.posts, postIndex);
             $comment.val("");
             $user.val("");
         });

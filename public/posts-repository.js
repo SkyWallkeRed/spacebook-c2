@@ -5,13 +5,11 @@ import postApi from './Api.js';
  */
 class PostsRepository {
     constructor() {
-        this.posts = this.initData();
+        this.posts = [];
     }
     async initData() {
         // console.log('calling');
-        let result = await postApi.fetch();
-        this.posts = result;
-        return this.posts;
+        this.posts = await postApi.fetch();
     }
 
 
@@ -26,27 +24,31 @@ class PostsRepository {
     }
 
     async removePost(id) {
-        let result = await $.ajax({
+        await $.ajax({
             method: "DELETE",
             url: `/posts/` + id,
-        })
+        });
+        await this.initData();
     }
 
     async addComment(newComment, postID) {
-        let result = await $.ajax({
+        await $.ajax({
             method: "PUT",
             url: '/posts/' + postID,
             data: newComment
-        })
+        });
+
+        // change the data 
     };
 
     async deleteComment(postID, commentID) { // neew more work !?!?!!
 
-        let result = await $.ajax({
+        await $.ajax({
             method: "DELETE",
             url: '/posts/' + postID + '/' + commentID,
 
-        })
+        });
+        // chzange the data
     }
 }
 
